@@ -70,7 +70,7 @@ Used when refreshing the error list.")
 
 ;;;###autoload
 (defun scala-errors-goto-first-error ()
-  "Navigate to the next SBT error."
+  "Navigate to the first SBT error."
   (interactive)
   (let ((buf (scala-errors-show-errors)))
     (if (and buf (buffer-live-p buf))
