@@ -84,14 +84,14 @@ Used when refreshing the error list.")
   "Navigate to the next SBT error."
   (interactive)
   (save-window-excursion (scala-errors-show-errors))
-  (call-interactively 'next-error))
+  (call-interactively #'next-error))
 
 ;;;###autoload
 (defun scala-errors-goto-prev-error ()
   "Navigate to the previous SBT error."
   (interactive)
   (save-window-excursion (scala-errors-show-errors))
-  (call-interactively 'previous-error))
+  (call-interactively #'previous-error))
 
 ;;;###autoload
 (defun scala-errors-refresh ()
@@ -100,7 +100,7 @@ Used when refreshing the error list.")
   (scala-errors--delete-quickfix)
   (scala-errors--force-generate-quickfix)
   (run-with-timer scala-errors--file-polling-interval nil
-                  'scala-errors--poll-until-exists 0)
+                  #'scala-errors--poll-until-exists 0)
   (message "Refreshing SBT errors..."))
 
 (defun scala-errors--poll-until-exists (repetitions)
@@ -113,7 +113,7 @@ Used when refreshing the error list.")
       (scala-errors-show-errors))
      (t
       (run-with-timer scala-errors--file-polling-interval
-                      nil 'scala-errors--poll-until-exists (1+ repetitions))))))
+                      nil #'scala-errors--poll-until-exists (1+ repetitions))))))
 
 (defun scala-errors--delete-quickfix ()
   (-when-let* ((buf (get-buffer (scala-errors--buffer-name)))
@@ -121,7 +121,7 @@ Used when refreshing the error list.")
     (when (f-exists? file) (f-delete file))
 
     (-when-let (wins (get-buffer-window-list buf))
-      (-each wins 'delete-window))
+      (-each wins #'delete-window))
 
     (kill-buffer buf)))
 
@@ -168,8 +168,7 @@ Used when refreshing the error list.")
   (read-only-mode +1)
 
   ;; Disable recompile
-  (local-set-key (kbd "g") nil)
-  (local-set-key (kbd "g") 'scala-errors-refresh)
+  (local-set-key (kbd "g") #'scala-errors-refresh)
 
   (font-lock-add-keywords
    nil
@@ -203,11 +202,11 @@ Used when refreshing the error list.")
 ;;;###autoload
 (defun scala-errors-spacemacs-init ()
   (when (fboundp 'spacemacs/set-leader-keys-for-major-mode)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfl" 'scala-errors-show-errors)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfg" 'scala-errors-refresh)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mff" 'scala-errors-goto-first-error)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfn" 'scala-errors-goto-next-error)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfp" 'scala-errors-goto-prev-error)))
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfl" #'scala-errors-show-errors)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfg" #'scala-errors-refresh)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mff" #'scala-errors-goto-first-error)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfn" #'scala-errors-goto-next-error)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfp" #'scala-errors-goto-prev-error)))
 
 (provide 'scala-errors)
 
