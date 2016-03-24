@@ -10,6 +10,8 @@ Compile your project with SBT and run `M-x scala-errors-show-errors`. Any errors
 found will be displayed in compilation buffer. The following commands are
 available to navigate errors:
 
+| Command name                    | Description                                |
+|---------------------------------|--------------------------------------------|
 | `scala-errors-goto-first-error` | Move to the first SBT error                |
 | `scala-errors-goto-next-error`  | Move to the next SBT error                 |
 | `scala-errors-goto-prev-error`  | Move to the previous SBT error.            |
