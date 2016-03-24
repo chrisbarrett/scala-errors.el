@@ -48,6 +48,7 @@ Used when refreshing the error list.")
   "The maximum time in seconds for polling for the quickfix file.
 Used when refreshing the error list.")
 
+
 
 ;;;###autoload
 (defun scala-errors-show-errors ()
@@ -132,7 +133,6 @@ Used when refreshing the error list.")
       (scala-errors--touch))))
 
 (defun scala-errors--touch ()
-  (interactive)
   (insert " ")
   (backward-delete-char 1)
   (save-buffer))
@@ -140,6 +140,7 @@ Used when refreshing the error list.")
 (defun scala-errors--buffer-name ()
   (format "*SBT errors<%s>*" (scala-errors--project-name)))
 
+
 
 (defun scala-errors--project-root ()
   (or (locate-dominating-file default-directory "target")
@@ -160,7 +161,6 @@ Used when refreshing the error list.")
   "Search upwards for the path to the quickfix file."
   (-when-let (proj-root (scala-errors--project-root))
     (f-join proj-root "target/quickfix/sbt.quickfix")))
-
 
 (define-compilation-mode scala-errors-mode "Scala Errors"
   "Compilation mode for SBT compiler errors using the QuickFix SBT plugin."
@@ -186,28 +186,28 @@ Used when refreshing the error list.")
            (+ space) (group (+ alpha) space "error" (? "s") space "found") (* space) eol)
       (1 font-lock-comment-face))
 
-     (,
-      (rx (group "/" (+ (not (any ":"))) "/") (+ (not (any "/" ":"))) ":" (+ num) ":" (group (* nonl)))
+     (,(rx (group "/" (+ (not (any ":"))) "/") (+ (not (any "/" ":"))) ":" (+ num) ":" (group (* nonl)))
       ;; Shorten paths
       (1 '(face nil invisible t))
       ;; Colour messages
       (2 font-lock-string-face)))))
 
+
 
-(eval-after-load 'aggressive-indent
-  '(add-to-list 'aggressive-indent-excluded-modes 'scala-errors-mode))
+;;;###autoload
+(defun scala-errors-init ()
+  (with-eval-after-load 'aggressive-indent
+    (when (boundp 'aggressive-indent-excluded-modes)
+      (add-to-list 'aggressive-indent-excluded-modes 'scala-errors-mode))))
 
-
-;;; Evil key bindings
-
-(eval-after-load 'evil-leader
-  '(progn
-     (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfl" 'scala-errors-show-errors)
-     (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfg" 'scala-errors-refresh)
-     (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mff" 'scala-errors-goto-first-error)
-     (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfn" 'scala-errors-goto-next-error)
-     (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfp" 'scala-errors-goto-prev-error)))
-
+;;;###autoload
+(defun scala-errors-spacemacs-init ()
+  (when (fboundp 'spacemacs/set-leader-keys-for-major-mode)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfl" 'scala-errors-show-errors)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfg" 'scala-errors-refresh)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mff" 'scala-errors-goto-first-error)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfn" 'scala-errors-goto-next-error)
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfp" 'scala-errors-goto-prev-error)))
 
 (provide 'scala-errors)
 
