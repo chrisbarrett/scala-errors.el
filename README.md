@@ -7,7 +7,7 @@ Quickly navigate to errors in a Scala project using [sbt-quickfix][].
 ## Usage
 
 Compile your project with SBT and run `M-x scala-errors-show-errors`. Any errors
-found will be displayed in compilation buffer. The following commands are
+found will be displayed in a compilation buffer. The following commands are
 available to navigate errors:
 
 | Command name                    | Description                                |
