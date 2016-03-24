@@ -30,11 +30,11 @@
 
 ;;; Code:
 
-(require 'f)
-(require 's)
-(require 'dash)
-(require 'rx)
 (require 'compile)
+(require 'dash)
+(require 'f)
+(require 'rx)
+(require 's)
 
 (defvar-local scala-errors--quickfix-last-update nil
   "Stores the last time the quickfix file was updated.
