@@ -107,7 +107,7 @@ Used when refreshing the error list.")
   (let ((time-spent (* scala-errors--file-polling-interval repetitions)))
     (cond
      ((< scala-errors--file-polling-max-time time-spent)
-      (message (format "No error output within %s seconds" scala-errors--file-polling-max-time))
+      (message "No error output within %s seconds" scala-errors--file-polling-max-time)
       (message "No errors from SBT"))
      ((f-exists? (scala-errors--quickfix-file-path))
       (scala-errors-show-errors))
