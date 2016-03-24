@@ -36,6 +36,21 @@
 (require 'rx)
 (require 's)
 
+(defgroup scala-errors nil
+  "Quickly navigate to errors in a Scala project using sbt-quickfix."
+  :group 'languages
+  :prefix "scala-errors-")
+
+(defcustom scala-errors-display-errors-buffer-function #'scala-errors-default-display-errors-function
+  "Command used to display the compilation buffer.
+
+It must be a unary function, taking the buffer to be displayed as an
+argument."
+  :group 'scala-errors
+  :type 'function)
+
+
+
 (defvar-local scala-errors--quickfix-last-update nil
   "Stores the last time the quickfix file was updated.
 This is set after comparisons with the current mod date of the file on disk.")
@@ -50,6 +65,11 @@ Used when refreshing the error list.")
 
 
 
+(defun scala-errors-default-display-errors-function (buf)
+  (pop-to-buffer buf)
+  (resize-temp-buffer-window (get-buffer-window buf))
+  (message "Press 'g' to refresh errors if they get out-of-sync with SBT"))
+
 ;;;###autoload
 (defun scala-errors-show-errors ()
   "Display SBT errors in a compilation buffer."
@@ -63,9 +83,7 @@ Used when refreshing the error list.")
        (t
         (scala-errors-mode)
         (goto-char (point-min))
-        (pop-to-buffer buf)
-        (resize-temp-buffer-window (get-buffer-window buf))
-        (message "Press 'g' to refresh errors if they get out-of-sync with SBT"))))
+        (funcall scala-errors-display-errors-buffer-function buf))))
     buf))
 
 ;;;###autoload
