@@ -13,7 +13,7 @@ USER_ELPA_D  = $(EMACS_D)/elpa
 
 SRCS         = $(filter-out %-pkg.el, $(wildcard *.el))
 TESTS        = $(wildcard test/*.el)
-TAR          = $(DIST)/scala-errors-$(VERSION).tar
+TAR          = $(DIST)/scala-errors-$(VERSION).el
 
 
 .PHONY: all test unit ecukes deps install uninstall reinstall clean-all clean
