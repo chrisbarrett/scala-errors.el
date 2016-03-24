@@ -1,4 +1,4 @@
-;;; scala-errors.el --- Quickly navigate to errors in a Scala project using sbt-quickfix.
+;;; scala-errors.el --- Quickly navigate to errors in a Scala project using sbt-quickfix.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016 Chris Barrett
 
