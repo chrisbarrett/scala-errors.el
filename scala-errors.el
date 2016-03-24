@@ -136,8 +136,8 @@ Used when refreshing the error list.")
 (defun scala-errors--delete-quickfix ()
   (-when-let* ((buf (get-buffer (scala-errors--buffer-name)))
                (file (buffer-file-name buf)))
-    (when (f-exists? file) (f-delete file))
-
+    (when (f-exists? file)
+      (f-delete file))
     (-when-let (wins (get-buffer-window-list buf))
       (-each wins #'delete-window))
 
@@ -220,11 +220,12 @@ Used when refreshing the error list.")
 ;;;###autoload
 (defun scala-errors-spacemacs-init ()
   (when (fboundp 'spacemacs/set-leader-keys-for-major-mode)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfl" #'scala-errors-show-errors)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfg" #'scala-errors-refresh)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mff" #'scala-errors-goto-first-error)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfn" #'scala-errors-goto-next-error)
-    (spacemacs/set-leader-keys-for-major-mode 'scala-mode "mfp" #'scala-errors-goto-prev-error)))
+    (spacemacs/set-leader-keys-for-major-mode 'scala-mode
+      "mfl" #'scala-errors-show-errors
+      "mfg" #'scala-errors-refresh
+      "mff" #'scala-errors-goto-first-error
+      "mfn" #'scala-errors-goto-next-error
+      "mfp" #'scala-errors-goto-prev-error)))
 
 (provide 'scala-errors)
 
