@@ -7,24 +7,17 @@ EMACSBATCH   = $(EMACS) $(EMACSFLAGS)
 VERSION     := $(shell EMACS=$(EMACS) $(CASK) version)
 PKG_DIR     := $(shell EMACS=$(EMACS) $(CASK) package-directory)
 PROJ_ROOT   := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+USER_ELPA_D  = ~/.emacs.d/elpa
 
-EMACS_D      = ~/.emacs.d
-USER_ELPA_D  = $(EMACS_D)/elpa
+SRC = scala-errors.el
 
-SRCS         = $(filter-out %-pkg.el, $(wildcard *.el))
-TESTS        = $(wildcard test/*.el)
-TAR          = $(DIST)/scala-errors-$(VERSION).tar
+.PHONY: all test install uninstall reinstall clean-all clean
 
+all : $(PKG_DIR)
 
-.PHONY: all test deps install uninstall reinstall clean-all clean
-all : deps $(TAR)
-
-deps :
-	$(CASK) install
-
-install : $(TAR)
+install : $(PKG_DIR)
 	$(EMACSBATCH) -l package -f package-initialize \
-	--eval '(package-install-file "$(PROJ_ROOT)/$(TAR)")'
+	--eval '(package-install-file "$(SRC)")'
 
 uninstall :
 	rm -rf $(USER_ELPA_D)/scala-errors-*
@@ -36,14 +29,10 @@ clean-all : clean
 
 clean :
 	rm -f *.elc
-	rm -rf $(DIST)
 	rm -f *-pkg.el
 
-$(TAR) : $(DIST) $(SRCS)
-	$(CASK) package $(DIST)
-
-$(DIST) :
-	mkdir $(DIST)
-
 test: $(PKG_DIR)
-	${CASK} exec ert-runner
+	$(CASK) exec ert-runner
+
+$(PKG_DIR) :
+	$(CASK) install
