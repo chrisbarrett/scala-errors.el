@@ -16,7 +16,7 @@ TESTS        = $(wildcard test/*.el)
 TAR          = $(DIST)/scala-errors-$(VERSION).tar
 
 
-.PHONY: all test unit ecukes deps install uninstall reinstall clean-all clean
+.PHONY: all test deps install uninstall reinstall clean-all clean
 all : deps $(TAR)
 
 deps :
@@ -45,10 +45,5 @@ $(TAR) : $(DIST) $(SRCS)
 $(DIST) :
 	mkdir $(DIST)
 
-test: unit ecukes
-
-unit: $(PKG_DIR)
+test: $(PKG_DIR)
 	${CASK} exec ert-runner
-
-ecukes: $(PKG_DIR)
-	${CASK} exec ecukes
